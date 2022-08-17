@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public interface BrowserUtils {
 
-    static String getCurrentUrl(){
+    static String getCurrentUrl() {
         return Driver.getDriver().getCurrentUrl();
     }
 
@@ -248,11 +248,10 @@ public interface BrowserUtils {
      *
      * @param element : WebElement to wait for
      * @param timeout : number of seconds to wait for
-     * @return : WebElement
      */
-    static WebElement waitForClickablility(WebElement element, int timeout) {
+    static void waitForClickablility(WebElement element, int timeout) {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), timeout);
-        return wait.until(ExpectedConditions.elementToBeClickable(element));
+        wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
     /**
@@ -309,6 +308,20 @@ public interface BrowserUtils {
         try {
             Assert.assertFalse("Element should not be visible: " + by, Driver.getDriver().findElement(by).isDisplayed());
         } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Verifies whether the element matching the provided locator is NOT displayed on page
+     *
+     * @param element : WebElement to verify
+     * @throws AssertionError the element matching the provided element is displayed
+     */
+    static void verifyElementNotDisplayed(WebElement element) {
+        try {
+            Assert.assertFalse("Element should not be visible: " + element, element.isDisplayed());
+        } catch (NoSuchElementException | StaleElementReferenceException e) {
             e.printStackTrace();
         }
     }

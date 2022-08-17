@@ -1,5 +1,6 @@
 package com.ssttek.stepDefinitions;
 
+import com.ssttek.pages.CartPage;
 import com.ssttek.pages.HomeDecorPage;
 import com.ssttek.pages.ProductDetailsPage;
 import com.ssttek.pages.SignInPage;
@@ -11,7 +12,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -26,45 +26,16 @@ public class AddToCart {
     protected SignInPage signInPage = new SignInPage();
     protected HomeDecorPage homeDecorPage = new HomeDecorPage();
     protected ProductDetailsPage productDetailsPage = new ProductDetailsPage();
+    protected CartPage cartPage = new CartPage();
 
-    private static final String mainWindowHandle = Driver.getDriver().getWindowHandle();
+    private String mainWindowHandle = Driver.getDriver().getWindowHandle();
+    private WebElement randomElement;
 
     @Given("user goes to ebay webpage")
     public void userGoesToEbayWebpage() {
         Driver.getDriver().get(ConfigurationReader.getProperty("ebay_url"));
     }
 
-    @Then("User clicks to Sign in link and goes to sign in page")
-    public void userClicksToSignInLinkAndGoesToSignInPage() {
-        homeDecorPage.getSignInPageLink().click();
-    }
-
-    @And("User enters a valid email")
-    public void userEntersAValidEmail() {
-        signInPage.getUsernameInput().sendKeys(ConfigurationReader.getProperty("email"));
-    }
-
-    @And("User clicks to Continue button")
-    public void userClicksToContinueButton() {
-        signInPage.getContinueButton().click();
-    }
-
-    @And("User enters a valid password")
-    public void userEntersAValidPassword() {
-        signInPage.getPasswordInput().sendKeys("password");
-    }
-
-    @And("User clicks to Sign in button")
-    public void userClicksToSignInButton() {
-        signInPage.getSignInButton().click();
-    }
-
-    @Then("User should be signed in successfully")
-    public void userShouldBeSignedInSuccessfully() {
-        BrowserUtils.hover(signInPage.getHiUsernameExpendableMenu());
-        wait.until(ExpectedConditions.visibilityOf(Driver.getDriver().findElement(By.linkText("Account settings"))));
-        BrowserUtils.verifyElementDisplayed(By.linkText("Account settings"));
-    }
 
     @When("User goes to Home_Garden category page")
     public void userGoesToHome_GardenCategoryPage() {
@@ -90,10 +61,22 @@ public class AddToCart {
     public void userClicksToAddToCartButton() {
 
         LinkedHashSet<String> windowHandles = (LinkedHashSet<String>) Driver.getDriver().getWindowHandles();
+
         windowHandles.removeIf(p -> p.equals(mainWindowHandle));
+
         windowHandles.forEach(p -> {
+
             Driver.getDriver().switchTo().window(p);
-            productDetailsPage.getAddToCartButton().click();
+
+            wait.until(ExpectedConditions.visibilityOf(productDetailsPage.getAddToCartButton()));
+            wait.until(ExpectedConditions.elementToBeClickable(productDetailsPage.getAddToCartButton()));
+
+            // sometimes it throws ElementClickInterceptedException with the normal selenium click method. So, I used javascript executor to click
+            BrowserUtils.clickWithJS(productDetailsPage.getAddToCartButton());
+
+            // wait for the product adding to cart
+            BrowserUtils.waitFor(2);
+
         });
 
         Driver.getDriver().switchTo().window(mainWindowHandle);
@@ -107,12 +90,32 @@ public class AddToCart {
     @Then("User should see the product is added")
     public void userShouldSeeTheProductIsAdded() {
 
-        int productCountOnCart = Driver.getDriver().findElements(By.xpath("//div[@class='listsummary-content']")).size();
-        WebElement itemsCount = Driver.getDriver().findElement(By.xpath("//span[contains(text(),'Items')]"));
+        Assert.assertEquals(3, cartPage.getProductList().size());
 
+        Assert.assertEquals("Items (3)", cartPage.getItemsIndicator().getText());
+    }
 
-        Assert.assertEquals(3, productCountOnCart);
+    @When("User removes one item from the cart")
+    public void userRemovesOneItemFromTheCart() {
 
-        Assert.assertEquals("Items (3)", itemsCount.getText());
+        randomElement = cartPage.getRemoveButtonsList().get(new Random().nextInt(cartPage.getRemoveButtonsList().size()));
+
+        wait.until(ExpectedConditions.elementToBeClickable(randomElement));
+        wait.until(ExpectedConditions.visibilityOf(randomElement));
+
+        // sometimes it throws ElementClickInterceptedException with the normal selenium click method. So, I used javascript executor to click
+        BrowserUtils.clickWithJS(randomElement);
+
+        //randomElement.click();
+    }
+
+    @Then("User should not see the deleted item on the cart")
+    public void userShouldNotSeeTheDeletedItemOnTheCart() {
+
+        BrowserUtils.waitForInvisibilityOf(randomElement);
+        BrowserUtils.verifyElementNotDisplayed(randomElement);
+
+        // for looking the result by manually
+        BrowserUtils.waitFor(5);
     }
 }
