@@ -10,7 +10,7 @@ Feature: Feature: It is requested to create a scenario using Selenium and Gauge 
    ##And User clicks to Sign in button
    ##Then User should be signed in successfully
 @tc2
-  Scenario: Verify that User should be add 3 products to cart
+  Scenario: Verify that User should be able to delete 1 products from cart
     When User goes to Home_Garden category page
     And User goes to Home_Decor page
     And User clicks to a product image

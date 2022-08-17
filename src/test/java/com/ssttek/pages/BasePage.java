@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 @Getter
 public class BasePage {
 
@@ -26,6 +28,12 @@ public class BasePage {
 
     @FindBy(xpath = "//li[@id='gh-minicart-hover']//a[1]")
     private WebElement cartButton;
+
+    @FindBy(xpath = "//a[@title='Watchlist']")
+    private WebElement watchListButton;
+
+    @FindBy(xpath = "//div[@class='gh-info__title']/span")
+    private List<WebElement> productsInWatchList; // use getText()
 
     public BasePage() {
         PageFactory.initElements(Driver.getDriver(),this);

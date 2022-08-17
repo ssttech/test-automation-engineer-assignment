@@ -3,7 +3,6 @@ package com.ssttek.stepDefinitions;
 import com.ssttek.pages.CartPage;
 import com.ssttek.pages.HomeDecorPage;
 import com.ssttek.pages.ProductDetailsPage;
-import com.ssttek.pages.SignInPage;
 import com.ssttek.utilities.BrowserUtils;
 import com.ssttek.utilities.ConfigurationReader;
 import com.ssttek.utilities.Driver;
@@ -16,20 +15,22 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Random;
 
 public class AddToCart {
 
     protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), 20L);
 
-    protected SignInPage signInPage = new SignInPage();
     protected HomeDecorPage homeDecorPage = new HomeDecorPage();
     protected ProductDetailsPage productDetailsPage = new ProductDetailsPage();
     protected CartPage cartPage = new CartPage();
 
     private String mainWindowHandle = Driver.getDriver().getWindowHandle();
     private WebElement randomElement;
+    private List<String> likedProductsNames = new ArrayList<>();
 
     @Given("user goes to ebay webpage")
     public void userGoesToEbayWebpage() {
@@ -75,7 +76,7 @@ public class AddToCart {
             BrowserUtils.clickWithJS(productDetailsPage.getAddToCartButton());
 
             // wait for the product adding to cart
-            BrowserUtils.waitFor(2);
+            BrowserUtils.waitFor(3);
 
         });
 
@@ -117,5 +118,42 @@ public class AddToCart {
 
         // for looking the result by manually
         BrowserUtils.waitFor(5);
+    }
+
+    @When("User likes {int} different products")
+    public void userLikes3DifferentProducts(int count) {
+
+        // creating some random numbers for selecting random products to add to the watchlist
+        List<Integer> nums = new ArrayList<>();
+        while (nums.size() < 3) {
+            int random = new Random().nextInt(homeDecorPage.getLikeButtonsList().size());
+            if (!nums.contains(random))
+                nums.add(random);
+        }
+
+        for (int i = 0; i < count; i++) {
+            likedProductsNames.add(homeDecorPage.getLikedProductsList().get(nums.get(i)).getText());
+
+            BrowserUtils.clickWithJS(homeDecorPage.getLikeButtonsList().get(nums.get(i)));
+        }
+    }
+
+    @And("User clicks to Watchlist link")
+    public void userClicksToWatchlistLink() {
+        // wait for the last product adding process is getting done
+        BrowserUtils.waitFor(2);
+        BrowserUtils.clickWithTimeOut(homeDecorPage.getWatchListButton(), 5);
+    }
+
+    @Then("User should see the liked products in the Watchlist")
+    public void userShouldSeeTheLikedProductsInTheWatchlist() {
+
+        List<String> productsInWatchListText = BrowserUtils.getElementsText(homeDecorPage.getProductsInWatchList());
+
+        likedProductsNames.forEach(each ->
+                Assert.assertTrue(("Names don't match. Expected: " + each + ", \nActual: " + productsInWatchListText), productsInWatchListText.contains(each)));
+
+        // (Sometimes) The names of some products show slight differences in the watchlist after they are added.
+        // I think it is a bug.
     }
 }

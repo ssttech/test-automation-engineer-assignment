@@ -35,7 +35,7 @@ public class SignInSteps {
 
     @And("User enters a valid password")
     public void userEntersAValidPassword() {
-        signInPage.getPasswordInput().sendKeys("password");
+        signInPage.getPasswordInput().sendKeys(ConfigurationReader.getProperty("password"));
     }
 
     @And("User clicks to Sign in button")

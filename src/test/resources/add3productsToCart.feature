@@ -11,7 +11,7 @@ Feature: It is requested to create a scenario using Selenium and Gauge on ebay.c
    ##Then User should be signed in successfully
 
   @tc1
-    Scenario: Verify that User should be add 3 products to cart
+    Scenario: Verify that User should be able to add 3 products to cart
       When User goes to Home_Garden category page
       And User goes to Home_Decor page
       And User clicks to a product image
