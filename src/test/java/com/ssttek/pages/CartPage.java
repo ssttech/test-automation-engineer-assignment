@@ -18,4 +18,7 @@ public class CartPage extends BasePage{
     @FindBy(xpath = "//span[contains(text(),'Items')]")
     private WebElement itemsIndicator;
 
+    @FindBy(xpath = "//div[@class='listsummary-content']//span[@class='BOLD']")
+    private List<WebElement> productsNamesList; // use getText()
+
 }

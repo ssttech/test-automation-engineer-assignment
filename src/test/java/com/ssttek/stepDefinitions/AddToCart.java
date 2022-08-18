@@ -31,6 +31,7 @@ public class AddToCart {
     private String mainWindowHandle = Driver.getDriver().getWindowHandle();
     private WebElement randomElement;
     private List<String> likedProductsNames = new ArrayList<>();
+    private List<String> addedToCartProductsNames = new ArrayList<>();
 
     @Given("user goes to ebay webpage")
     public void userGoesToEbayWebpage() {
@@ -53,7 +54,11 @@ public class AddToCart {
         for (int i = 0; i < 3; i++) {
             wait.until(ExpectedConditions.elementToBeClickable(homeDecorPage.getProductsLinksList().get(0)));
             wait.until(ExpectedConditions.visibilityOfAllElements(homeDecorPage.getProductsLinksList()));
-            homeDecorPage.getProductsLinksList().get(new Random().nextInt(homeDecorPage.getProductsLinksList().size())).click();
+
+            int random = new Random().nextInt(homeDecorPage.getProductsLinksList().size());
+            homeDecorPage.getProductsLinksList().get(random).click();
+            addedToCartProductsNames.add(homeDecorPage.getAddedToCartProductsLinksList().get(random).getText());
+
             Driver.getDriver().switchTo().window(mainWindowHandle);
         }
     }
@@ -90,6 +95,8 @@ public class AddToCart {
 
     @Then("User should see the products are added")
     public void userShouldSeeTheProductsAreAdded() {
+
+        addedToCartProductsNames.forEach(each-> Assert.assertTrue(BrowserUtils.getElementsText(cartPage.getProductsNamesList()).contains(each)));
 
         Assert.assertEquals(3, cartPage.getProductList().size());
 
