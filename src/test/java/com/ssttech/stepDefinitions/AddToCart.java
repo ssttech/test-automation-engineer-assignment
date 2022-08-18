@@ -114,7 +114,6 @@ public class AddToCart {
         // sometimes it throws ElementClickInterceptedException with the normal selenium click method. So, I used javascript executor to click
         BrowserUtils.clickWithJS(randomElement);
 
-        //randomElement.click();
     }
 
     @Then("User should not see the deleted item on the cart")
@@ -146,16 +145,19 @@ public class AddToCart {
 
             // there are two different page(environments) to be shown to the user. It changes accordingly on time/intensity etc.
             if (homeDecorPage.getLikeButtonsList().size() > 0) {
+
                 // like one of the product from the table randomly
                 BrowserUtils.clickWithJS(homeDecorPage.getLikeButtonsList().get(nums.get(i)));
                 // adding to list the name of product that liked
                 likedProductsNames.add(homeDecorPage.getLikedProductsList().get(nums.get(i)).getText());
             } else {
+
                 // like one of the product from the table randomly
                 BrowserUtils.clickWithJS(homeDecorPage.getLikeLinksList().get(nums.get(i)));
                 // adding to list the name of product that liked
                 likedProductsNames.add(homeDecorPage.getLikedProductsListFromLinks().get(nums.get(i)).getText());
             }
+
             // wait for the product adding to watchlist process is getting done
             BrowserUtils.waitFor(2);
         }

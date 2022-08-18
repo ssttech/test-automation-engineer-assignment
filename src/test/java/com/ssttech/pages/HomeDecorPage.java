@@ -27,7 +27,4 @@ public class HomeDecorPage extends BasePage {
     @FindBy(xpath = "//span[@class='s-item__watchheart']/preceding-sibling::div//h3")
     private List<WebElement> likedProductsListFromLinks; // use getText()
 
-    public void combineLikeButtonsAndLinks() {
-        likeButtonsList.addAll(likeLinksList);
-    }
 }

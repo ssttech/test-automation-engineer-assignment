@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
                 "rerun:target/rerun.txt",
         },
         features = "@target/rerun.txt",
-        glue = "com/cydeo/step_definitions"
+        glue = "com/ssttech/stepDefinitions"
 )
 
 public class FailedTestRunner {
