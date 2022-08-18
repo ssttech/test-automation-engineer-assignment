@@ -1,4 +1,5 @@
-Feature: Feature: It is requested to create a scenario using Selenium and Gauge on ebay.com
+@regression
+Feature: It is requested to create a scenario using Selenium and Gauge on ebay.com
   From product details within the sub-category (home decor) in the home and garden category at ebay.com;
 
   Background:
@@ -18,5 +19,5 @@ Feature: Feature: It is requested to create a scenario using Selenium and Gauge 
     And User clicks to Watchlist link
     Then User should see the liked products in the Watchlist
 
-    # Sometimes the webpage of the ebay asking captcha problems or asking for entry of individual information with html alerts.
+    # Sometimes the webpage of the ebay asking captcha problems.
     # Therefore the TC is going to be FAILED

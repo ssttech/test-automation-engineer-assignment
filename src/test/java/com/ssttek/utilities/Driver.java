@@ -50,7 +50,7 @@ public abstract class Driver {
                     break;
             }
             driverPool.get().manage().window().maximize();
-            driverPool.get().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            driverPool.get().manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         }
 
         return driverPool.get();

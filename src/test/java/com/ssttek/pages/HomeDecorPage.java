@@ -15,6 +15,16 @@ public class HomeDecorPage extends BasePage{
     @FindBy(xpath = "//button[@class='s-item__watchheart-click']")
     private List<WebElement> likeButtonsList;
 
+    @FindBy(xpath = "//span[@class='s-item__watchheart']/a")
+    private List<WebElement> likeLinksList;
+
     @FindBy(xpath = "//button[@class='s-item__watchheart-click']/../preceding-sibling::div//h3")
     private List<WebElement> likedProductsList; // use getText()
+
+    @FindBy(xpath = "//span[@class='s-item__watchheart']/preceding-sibling::div//h3")
+    private List<WebElement> likedProductsListFromLinks; // use getText()
+
+    public void combineLikeButtonsAndLinks(){
+        likeButtonsList.addAll(likeLinksList);
+    }
 }

@@ -14,10 +14,10 @@ import org.junit.runner.RunWith;
                 "json:target/cucumber-report.json",
                 "junit:target/cucumber-report.xml",
                 "rerun:target/rerun.txt"
-        }
+        },
 
 
-        //tags = "@tc2"           // This must be assigned with Test Execution ticket number from JIRA in order to run all scenarios
+        tags = "@regression"           // This must be assigned with Test Execution ticket number from JIRA in order to run all scenarios
                                 // and get their "cucumber.json" report to export to the JIRA at the end.
 
 )

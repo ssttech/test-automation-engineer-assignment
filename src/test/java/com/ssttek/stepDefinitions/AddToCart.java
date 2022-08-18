@@ -88,8 +88,8 @@ public class AddToCart {
         homeDecorPage.getCartButton().click();
     }
 
-    @Then("User should see the product is added")
-    public void userShouldSeeTheProductIsAdded() {
+    @Then("User should see the products are added")
+    public void userShouldSeeTheProductsAreAdded() {
 
         Assert.assertEquals(3, cartPage.getProductList().size());
 
@@ -125,22 +125,37 @@ public class AddToCart {
 
         // creating some random numbers for selecting random products to add to the watchlist
         List<Integer> nums = new ArrayList<>();
+        int random;
         while (nums.size() < 3) {
-            int random = new Random().nextInt(homeDecorPage.getLikeButtonsList().size());
+            if (homeDecorPage.getLikeButtonsList().size() > 0)
+                random = new Random().nextInt(homeDecorPage.getLikeButtonsList().size());
+            else
+                random = new Random().nextInt(homeDecorPage.getLikeLinksList().size());
             if (!nums.contains(random))
                 nums.add(random);
         }
 
         for (int i = 0; i < count; i++) {
-            likedProductsNames.add(homeDecorPage.getLikedProductsList().get(nums.get(i)).getText());
 
-            BrowserUtils.clickWithJS(homeDecorPage.getLikeButtonsList().get(nums.get(i)));
+            // there are two different page(environments) to be shown to the user. It changes accordingly on time/intensity etc.
+            if (homeDecorPage.getLikeButtonsList().size() > 0) {
+                // like one of the product from the table randomly
+                BrowserUtils.clickWithJS(homeDecorPage.getLikeButtonsList().get(nums.get(i)));
+                // adding to list the name of product that liked
+                likedProductsNames.add(homeDecorPage.getLikedProductsList().get(nums.get(i)).getText());
+            } else {
+                // like one of the product from the table randomly
+                BrowserUtils.clickWithJS(homeDecorPage.getLikeLinksList().get(nums.get(i)));
+                // adding to list the name of product that liked
+                likedProductsNames.add(homeDecorPage.getLikedProductsListFromLinks().get(nums.get(i)).getText());
+            }
+            // wait for the product adding to watchlist process is getting done
+            BrowserUtils.waitFor(2);
         }
     }
 
     @And("User clicks to Watchlist link")
     public void userClicksToWatchlistLink() {
-        // wait for the last product adding process is getting done
         BrowserUtils.waitFor(2);
         BrowserUtils.clickWithTimeOut(homeDecorPage.getWatchListButton(), 5);
     }
@@ -151,7 +166,7 @@ public class AddToCart {
         List<String> productsInWatchListText = BrowserUtils.getElementsText(homeDecorPage.getProductsInWatchList());
 
         likedProductsNames.forEach(each ->
-                Assert.assertTrue(("Names don't match. Expected: " + each + ", \nActual: " + productsInWatchListText), productsInWatchListText.contains(each)));
+                Assert.assertTrue(("Names don't match. Expected: " + likedProductsNames + ", \nActual: " + productsInWatchListText), productsInWatchListText.contains(each)));
 
         // (Sometimes) The names of some products show slight differences in the watchlist after they are added.
         // I think it is a bug.
