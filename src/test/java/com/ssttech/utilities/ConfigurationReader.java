@@ -1,4 +1,4 @@
-package com.ssttek.utilities;
+package com.ssttech.utilities;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.ssttek.pages;
+package com.ssttech.pages;
 
 import lombok.Getter;
 import org.openqa.selenium.WebElement;
@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 @Getter
-public class CartPage extends BasePage{
+public class CartPage extends BasePage {
 
     @FindBy(xpath = "//button[@data-test-id='cart-remove-item']")
     private List<WebElement> removeButtonsList;

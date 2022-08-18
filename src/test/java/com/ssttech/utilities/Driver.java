@@ -1,4 +1,4 @@
-package com.ssttek.utilities;
+package com.ssttech.utilities;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;

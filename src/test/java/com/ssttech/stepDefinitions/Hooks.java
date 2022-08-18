@@ -1,6 +1,6 @@
-package com.ssttek.stepDefinitions;
+package com.ssttech.stepDefinitions;
 
-import com.ssttek.utilities.Driver;
+import com.ssttech.utilities.Driver;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;

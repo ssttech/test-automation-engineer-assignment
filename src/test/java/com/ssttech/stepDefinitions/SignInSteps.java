@@ -1,10 +1,10 @@
-package com.ssttek.stepDefinitions;
+package com.ssttech.stepDefinitions;
 
-import com.ssttek.pages.HomeDecorPage;
-import com.ssttek.pages.SignInPage;
-import com.ssttek.utilities.BrowserUtils;
-import com.ssttek.utilities.ConfigurationReader;
-import com.ssttek.utilities.Driver;
+import com.ssttech.pages.HomeDecorPage;
+import com.ssttech.pages.SignInPage;
+import com.ssttech.utilities.BrowserUtils;
+import com.ssttech.utilities.ConfigurationReader;
+import com.ssttech.utilities.Driver;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import org.openqa.selenium.By;
@@ -15,7 +15,7 @@ public class SignInSteps {
 
     protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), 20L);
 
-    private HomeDecorPage homeDecorPage= new HomeDecorPage();
+    private HomeDecorPage homeDecorPage = new HomeDecorPage();
     private SignInPage signInPage = new SignInPage();
 
     @Then("User clicks to Sign in link and goes to sign in page")

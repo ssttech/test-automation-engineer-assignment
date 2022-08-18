@@ -1,4 +1,4 @@
-package com.ssttek.runners;
+package com.ssttech.runners;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;

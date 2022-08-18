@@ -1,4 +1,4 @@
-package com.ssttek.utilities;
+package com.ssttech.utilities;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;

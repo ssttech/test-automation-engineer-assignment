@@ -1,6 +1,6 @@
-package com.ssttek.pages;
+package com.ssttech.pages;
 
-import com.ssttek.utilities.Driver;
+import com.ssttech.utilities.Driver;
 import lombok.Getter;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -36,6 +36,6 @@ public class BasePage {
     private List<WebElement> productsInWatchList; // use getText()
 
     public BasePage() {
-        PageFactory.initElements(Driver.getDriver(),this);
+        PageFactory.initElements(Driver.getDriver(), this);
     }
 }

@@ -1,11 +1,11 @@
-package com.ssttek.pages;
+package com.ssttech.pages;
 
 import lombok.Getter;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @Getter
-public class SignInPage extends BasePage{
+public class SignInPage extends BasePage {
 
     @FindBy(id = "userid")
     private WebElement usernameInput;

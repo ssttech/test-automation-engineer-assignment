@@ -1,11 +1,11 @@
-package com.ssttek.stepDefinitions;
+package com.ssttech.stepDefinitions;
 
-import com.ssttek.pages.CartPage;
-import com.ssttek.pages.HomeDecorPage;
-import com.ssttek.pages.ProductDetailsPage;
-import com.ssttek.utilities.BrowserUtils;
-import com.ssttek.utilities.ConfigurationReader;
-import com.ssttek.utilities.Driver;
+import com.ssttech.pages.CartPage;
+import com.ssttech.pages.HomeDecorPage;
+import com.ssttech.pages.ProductDetailsPage;
+import com.ssttech.utilities.BrowserUtils;
+import com.ssttech.utilities.ConfigurationReader;
+import com.ssttech.utilities.Driver;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -96,7 +96,7 @@ public class AddToCart {
     @Then("User should see the products are added")
     public void userShouldSeeTheProductsAreAdded() {
 
-        addedToCartProductsNames.forEach(each-> Assert.assertTrue(BrowserUtils.getElementsText(cartPage.getProductsNamesList()).contains(each)));
+        addedToCartProductsNames.forEach(each -> Assert.assertTrue(BrowserUtils.getElementsText(cartPage.getProductsNamesList()).contains(each)));
 
         Assert.assertEquals(3, cartPage.getProductList().size());
 
