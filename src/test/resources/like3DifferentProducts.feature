@@ -1,6 +1,5 @@
 @regression
-Feature: It is requested to create a scenario using Selenium and Gauge on ebay.com
-  From product details within the sub-category (home decor) in the home and garden category at ebay.com;
+Feature: Like 3 different product from the list
 
   Background:
     Given user goes to ebay webpage
