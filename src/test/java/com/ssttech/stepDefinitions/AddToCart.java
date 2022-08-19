@@ -96,7 +96,11 @@ public class AddToCart {
     @Then("User should see the products are added")
     public void userShouldSeeTheProductsAreAdded() {
 
-        addedToCartProductsNames.forEach(each -> Assert.assertTrue(BrowserUtils.getElementsText(cartPage.getProductsNamesList()).contains(each)));
+        // (Sometimes) The names of some products show slight differences in the cart after they are added.
+        // I think it is a bug.
+        List<String> productNamesText = BrowserUtils.getElementsText(cartPage.getProductsNamesList());
+        addedToCartProductsNames.forEach(each ->
+                Assert.assertTrue("Names don't match! Expected: " + each + " Actual: " + productNamesText, productNamesText.contains(each)));
 
         Assert.assertEquals(3, cartPage.getProductList().size());
 
