@@ -16,6 +16,6 @@ Feature: Delete 1 product from cart
     And User clicks to a product image
     When User clicks to addToCart button
     When User goes to cart
-    Then User should see the products are added
+    #Then User should see the products are added
     When User removes one item from the cart
     Then User should not see the deleted item on the cart
