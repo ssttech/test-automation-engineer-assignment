@@ -26,6 +26,12 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <jsonFiles>
+                                <jsonFile>target/cucumber.json</jsonFile>
+                            </jsonFiles>
+                            <outputDirectory>target/cucumber-html-report</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

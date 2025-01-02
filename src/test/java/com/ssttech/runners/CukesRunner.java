@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
                 "html:target/cucumber-html-report",
                 "json:target/cucumber.json",
                 "junit:target/cucumber-junit-report.xml",
-                "net.masterthought.cucumber.ReportGenerator:target/cucumber-html-report",
+                "net.masterthought.cucumber.ReportGenerator:target/cucumber-html-report.json:target/cucumber.json",
                 "rerun:target/rerun.txt"
         },
 
