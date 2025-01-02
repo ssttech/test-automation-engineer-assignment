@@ -11,9 +11,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+
 public class SignInSteps {
 
-    protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), 20L);
+    protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
 
     private HomeDecorPage homeDecorPage = new HomeDecorPage();
     private SignInPage signInPage = new SignInPage();

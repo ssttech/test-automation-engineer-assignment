@@ -11,10 +11,9 @@ import org.junit.runner.RunWith;
         //dryRun = true,
         plugin = {
                 "pretty",
-                "html:target/cucumber-html-report",
+                "html:target/cucumber-html-report.html",
                 "json:target/cucumber.json",
                 "junit:target/cucumber-junit-report.xml",
-                "net.masterthought.cucumber.ReportGenerator:target/cucumber-html-report.json:target/cucumber.json",
                 "rerun:target/rerun.txt"
         },
 

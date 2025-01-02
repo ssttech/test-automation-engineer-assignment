@@ -6,7 +6,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import java.util.Collections;
@@ -60,10 +59,6 @@ public abstract class Driver {
                     WebDriverManager.edgedriver().setup();
                     driverPool.set(new EdgeDriver());
                     break;
-                case "opera":
-                    WebDriverManager.operadriver().setup();
-                    driverPool.set(new OperaDriver());
-                    break;
             }
             driverPool.get().manage().window().maximize();
             driverPool.get().manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
@@ -81,7 +76,9 @@ public abstract class Driver {
         options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
         options.setExperimentalOption("useAutomationExtension", false);
         options.addArguments(args);
-        options.setHeadless(isHeadless);
+        if (isHeadless) {
+            options.addArguments("--headless");
+        }
         return options;
     }
 

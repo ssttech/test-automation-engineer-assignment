@@ -9,7 +9,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,6 +20,8 @@ public interface BrowserUtils {
     static String getCurrentUrl() {
         return Driver.getDriver().getCurrentUrl();
     }
+
+    WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
 
     /**
      * This method will wait throughout the given time.
@@ -39,7 +43,6 @@ public interface BrowserUtils {
      * @param element : element to wait for visibility of it
      */
     static void waitForClickability(WebElement element) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), 10);
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
@@ -47,7 +50,7 @@ public interface BrowserUtils {
     /**
      * This method looks for if the given URL and Title are present in the browser's tabs.
      *
-     * @param expectedInUrl    : expected URL , for verify if the url contains given String.
+     * @param expectedInUrl     expected URL , for verify if the url contains given String.
      *                         - If condition matches, will break loop.
      * @param expectedInTitle: expected Title, expectedInTitle to be compared against actualTitle
      */
@@ -61,14 +64,14 @@ public interface BrowserUtils {
 
             System.out.println("Current URL: " + Driver.getDriver().getCurrentUrl());
 
-            if (Driver.getDriver().getCurrentUrl().contains(expectedInUrl)) {
+            if (Objects.requireNonNull(Driver.getDriver().getCurrentUrl()).contains(expectedInUrl)) {
                 break;
             }
         }
 
         //5. Assert:Title contains "expectedInTitle"
         String actualTitle = Driver.getDriver().getTitle();
-        Assert.assertTrue(actualTitle.contains(expectedInTitle));
+        Assert.assertTrue(Objects.requireNonNull(actualTitle).contains(expectedInTitle));
     }
 
 
@@ -89,7 +92,6 @@ public interface BrowserUtils {
      */
     static void waitForInvisibilityOf(WebElement webElement) {
         //Driver.getDriver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), 10);
         wait.until(ExpectedConditions.invisibilityOf(webElement));
     }
 
@@ -100,7 +102,7 @@ public interface BrowserUtils {
      * @param expectedInUrl : This method will accept a String "expectedText"
      */
     static void verifyURLContains(String expectedInUrl) {
-        Assert.assertTrue(Driver.getDriver().getCurrentUrl().contains(expectedInUrl));
+        Assert.assertTrue(Objects.requireNonNull(Driver.getDriver().getCurrentUrl()).contains(expectedInUrl));
     }
 
 
@@ -165,7 +167,7 @@ public interface BrowserUtils {
         String origin = Driver.getDriver().getWindowHandle();
         for (String handle : Driver.getDriver().getWindowHandles()) {
             Driver.getDriver().switchTo().window(handle);
-            if (Driver.getDriver().getTitle().equals(targetTitle)) {
+            if (Objects.requireNonNull(Driver.getDriver().getTitle()).equals(targetTitle)) {
                 return;
             }
         }
@@ -227,7 +229,7 @@ public interface BrowserUtils {
      * @return : WebElement
      */
     static WebElement waitForVisibility(WebElement element, int timeToWaitInSec) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), timeToWaitInSec);
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeToWaitInSec));
         return wait.until(ExpectedConditions.visibilityOf(element));
     }
 
@@ -239,7 +241,7 @@ public interface BrowserUtils {
      * @return : WebElement
      */
     static WebElement waitForVisibility(By locator, int timeout) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), timeout);
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeout));
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
@@ -250,7 +252,7 @@ public interface BrowserUtils {
      * @param timeout : number of seconds to wait for
      */
     static void waitForClickablility(WebElement element, int timeout) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), timeout);
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeout));
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
@@ -262,7 +264,7 @@ public interface BrowserUtils {
      * @return : WebElement
      */
     static WebElement waitForClickablility(By locator, int timeout) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), timeout);
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeout));
         return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
@@ -273,9 +275,9 @@ public interface BrowserUtils {
      */
     static void waitForPageToLoad(long timeOutInSeconds) {
         ExpectedCondition<Boolean> expectation = driver ->
-                ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+                ((JavascriptExecutor) Objects.requireNonNull(driver)).executeScript("return document.readyState").equals("complete");
         try {
-            WebDriverWait wait = new WebDriverWait(Driver.getDriver(), timeOutInSeconds);
+            WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeOutInSeconds));
             wait.until(expectation);
         } catch (Throwable error) {
             error.printStackTrace();
@@ -345,32 +347,30 @@ public interface BrowserUtils {
 
 
     /**
-     * Waits for element to be not stale
+     * Waits for an element to become stale. An element is stale if the element is no longer attached to the DOM,
+     * either because it was removed or the page was reloaded.
      *
      * @param element : WebElement to wait for
+     * @throws StaleElementReferenceException if the element becomes stale more than 15 times
      */
     static void waitForStaleElement(WebElement element) {
-        int y = 0;
-        while (y <= 15) {
-            if (y == 1)
+        int attempts = 0;
+        while (attempts <= 15) {
+            try {
+                // if the element is displayed, it means it is still attached to the DOM
+                element.isDisplayed();
+                break;
+            } catch (StaleElementReferenceException e) {
+                // if the element is stale, we catch the exception and increment the attempts
+                attempts++;
+
                 try {
-                    element.isDisplayed();
-                    break;
-                } catch (StaleElementReferenceException st) {
-                    y++;
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                } catch (WebDriverException we) {
-                    y++;
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    // we wait for a short period of time before trying again
+                    Thread.sleep(300);
+                } catch (InterruptedException ignored) {
+                    ignored.printStackTrace();
                 }
+            }
         }
     }
 
@@ -398,7 +398,7 @@ public interface BrowserUtils {
     /**
      * Performs double click action on an element using Actions class
      *
-     * @param element : WebElement to double click on
+     * @param element : WebElement to double-click on
      */
     static void doubleClick(WebElement element) {
         new Actions(Driver.getDriver()).doubleClick(element).build().perform();
@@ -518,7 +518,7 @@ public interface BrowserUtils {
      * @param time : number of seconds to wait for
      */
     static void waitForPresenceOfElement(By by, long time) {
-        new WebDriverWait(Driver.getDriver(), time).until(ExpectedConditions.presenceOfElementLocated(by));
+        new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(time)).until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
 }

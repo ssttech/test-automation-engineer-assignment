@@ -15,6 +15,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.Random;
 
 public class AddToCart {
 
-    protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), 20L);
+    protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
 
     protected HomeDecorPage homeDecorPage = new HomeDecorPage();
     protected ProductDetailsPage productDetailsPage = new ProductDetailsPage();
