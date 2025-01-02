@@ -10,11 +10,15 @@ import org.junit.runner.RunWith;
         glue = "com/ssttech/stepDefinitions",
         //dryRun = true,
         plugin = {
-                "html:target/cucumber-report.html",
-                "json:target/cucumber-report.json",
-                "junit:target/cucumber-report.xml",
+                "pretty",
+                "html:target/cucumber-html-report",
+                "json:target/cucumber.json",
+                "junit:target/cucumber-junit-report.xml",
+                "net.masterthought.cucumber.ReportGenerator:target/cucumber-html-report",
                 "rerun:target/rerun.txt"
         },
+
+        monochrome = true,
 
 
         tags = "@regression"           // This must be assigned with Test Execution ticket number from JIRA in order to run all scenarios
